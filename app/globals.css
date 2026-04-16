@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* BRUTO neon — taken from the brand PDF (page 1 fill) */
+  --neon: #E6FF7B;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-feature-settings: "ss01", "ss02";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: crosshair;
+}
+
+::selection {
+  background-color: #E6FF7B;
+  color: #000;
+}
+
+/* Hide scrollbar but keep scroll */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #E6FF7B;
+}
+
+@layer utilities {
+  .text-hero {
+    font-size: clamp(5rem, 22vw, 22rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  .text-display {
+    font-size: clamp(3rem, 8vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+
+  .border-neon {
+    border-color: #E6FF7B;
+  }
+
+  .bg-neon {
+    background-color: #E6FF7B;
+  }
+
+  .text-neon {
+    color: #E6FF7B;
+  }
+
+  /* Invert-on-dark technique for SVGs that are black on a dark bg.
+     The /brand SVGs are pure black, so to render them white we invert. */
+  .icon-invert {
+    filter: invert(1);
+  }
+}
