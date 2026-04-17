@@ -4,22 +4,21 @@ const platos = [
   {
     name: "CHIVITO",
     desc: "lomo, jamón, queso, lechuga, tomate, huevo y mayonesa",
-    price: "10",
   },
-  { name: "TORTILLA", desc: "", price: "10" },
-  { name: "EMPANADA", desc: "de carne / j&q / humita", price: "7" },
-  { name: "CROQUETA", desc: "jamón ibérico", price: "10" },
+  { name: "TORTILLA", desc: "" },
+  { name: "EMPANADA", desc: "de carne / j&q / humita" },
+  { name: "CROQUETA", desc: "jamón ibérico" },
 ];
 
 const tragos = [
-  { name: "CAÑA", price: "5" },
-  { name: "NEGRONI", price: "7" },
-  { name: "AMERICANO", price: "10" },
-  { name: "FERNET", price: "7" },
-  { name: "WHISKEY", price: "10" },
-  { name: "RONCOLA", price: "7" },
-  { name: "GIN TONIC", price: "10" },
-  { name: "COPA DE VINO", price: "7" },
+  { name: "CAÑA" },
+  { name: "NEGRONI" },
+  { name: "AMERICANO" },
+  { name: "FERNET" },
+  { name: "WHISKEY" },
+  { name: "RONCOLA" },
+  { name: "GIN TONIC" },
+  { name: "COPA DE VINO" },
 ];
 
 function MenuCard({
@@ -83,21 +82,16 @@ export default function Menu() {
             {platos.map((item) => (
               <li
                 key={item.name}
-                className="flex items-start justify-between gap-4 py-4 border-b border-black/20 last:border-b-0"
+                className="py-4 border-b border-black/20 last:border-b-0"
               >
-                <div>
-                  <p className="font-black text-xl md:text-2xl tracking-tight leading-tight">
-                    {item.name}
+                <p className="font-black text-xl md:text-2xl tracking-tight leading-tight">
+                  {item.name}
+                </p>
+                {item.desc && (
+                  <p className="font-medium text-sm text-black/60 lowercase mt-0.5">
+                    {item.desc}
                   </p>
-                  {item.desc && (
-                    <p className="font-medium text-sm text-black/60 lowercase mt-0.5">
-                      {item.desc}
-                    </p>
-                  )}
-                </div>
-                <span className="font-black text-2xl md:text-3xl tracking-tighter tabular-nums shrink-0">
-                  {item.price}
-                </span>
+                )}
               </li>
             ))}
           </ul>
@@ -108,14 +102,11 @@ export default function Menu() {
             {tragos.map((item) => (
               <li
                 key={item.name}
-                className="flex items-center justify-between gap-4 py-4 border-b border-white/10 last:border-b-0"
+                className="py-4 border-b border-white/10 last:border-b-0"
               >
                 <p className="font-black text-xl md:text-2xl tracking-tight">
                   {item.name}
                 </p>
-                <span className="font-black text-2xl md:text-3xl tracking-tighter tabular-nums text-neon shrink-0">
-                  {item.price}
-                </span>
               </li>
             ))}
           </ul>

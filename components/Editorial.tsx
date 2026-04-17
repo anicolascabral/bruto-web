@@ -74,7 +74,7 @@ export default function Editorial() {
       {/* Closing line */}
       <div className="px-6 py-16">
         <p
-          className="font-black text-white/10 leading-none"
+          className="font-black text-white/80 leading-none"
           style={{
             fontSize: "clamp(2rem, 5vw, 4.5rem)",
             letterSpacing: "-0.04em",
@@ -85,7 +85,7 @@ export default function Editorial() {
           <br />
           Directo, pero con criterio.
           <br />
-          <span className="text-neon/20">Así es donde funciona.</span>
+          <span className="text-neon">Así es donde funciona.</span>
         </p>
       </div>
     </section>

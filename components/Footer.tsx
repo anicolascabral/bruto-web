@@ -30,7 +30,7 @@ export default function Footer() {
       {/* Big location text */}
       <div className="px-6 pt-20 pb-16 border-b border-white/10 overflow-hidden">
         <p
-          className="font-black text-white/10 leading-none whitespace-nowrap"
+          className="font-black text-white/70 leading-none whitespace-nowrap"
           style={{
             fontSize: "clamp(4rem, 14vw, 14rem)",
             letterSpacing: "-0.05em",
@@ -64,12 +64,20 @@ export default function Footer() {
           <p className="text-white/40 text-xs uppercase tracking-widest font-medium mb-4">
             Dirección
           </p>
-          <p className="font-black text-white text-xl md:text-2xl tracking-tight leading-tight">
+          <a
+            href="https://share.google/s5jRnc5OYu4hfFSJ6"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-black text-white text-xl md:text-2xl tracking-tight leading-tight hover:text-neon transition-colors duration-150 block"
+          >
             Isidoro Macabich 30
             <br />
             Santa Eulària des Riu
             <br />
             <span className="text-neon">Ibiza</span>, 07840
+          </a>
+          <p className="mt-4 text-white/30 text-xs uppercase tracking-widest font-medium">
+            Cómo llegar →
           </p>
         </div>
 
@@ -107,6 +115,12 @@ export default function Footer() {
             className="font-black text-white text-xl md:text-2xl tracking-tight hover:text-neon transition-colors duration-150 block mb-2"
           >
             652 57 17 08
+          </a>
+          <a
+            href="mailto:contacto@brutobar.com"
+            className="font-medium text-white/70 text-sm tracking-tight hover:text-neon transition-colors duration-150 block break-all"
+          >
+            contacto@brutobar.com
           </a>
           <p className="text-white/40 text-sm font-medium mt-6 flex items-center gap-2">
             <Image
