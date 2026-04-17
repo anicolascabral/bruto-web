@@ -29,7 +29,7 @@ export default function Hero() {
               alt=""
               width={i.w}
               height={i.h}
-              className="h-12 md:h-16 w-auto text-black"
+              className="h-12 md:h-16 w-auto"
               priority
             />
           ))}

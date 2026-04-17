@@ -68,18 +68,9 @@ export default function Menu() {
     <section id="menu" className="bg-black border-t border-white/10">
       {/* Section label */}
       <div className="px-6 pt-16 pb-6 flex items-center justify-between border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/brand/icon-fork.svg"
-            alt=""
-            width={14}
-            height={20}
-            className="h-5 w-auto icon-invert opacity-60"
-          />
-          <span className="text-white/40 font-medium text-xs uppercase tracking-widest">
-            — menú
-          </span>
-        </div>
+        <span className="text-white/40 font-medium text-xs uppercase tracking-widest">
+          — menú
+        </span>
         <span className="text-white/40 font-medium text-xs uppercase tracking-widest">
           Santa Eulària · Ibiza
         </span>
@@ -129,20 +120,6 @@ export default function Menu() {
             ))}
           </ul>
         </MenuCard>
-      </div>
-
-      {/* Soporte note */}
-      <div className="px-6 py-4 border-t border-white/10 flex items-center gap-3">
-        <Image
-          src="/brand/icon-vinyl.svg"
-          alt=""
-          width={18}
-          height={22}
-          className="h-5 w-auto icon-invert opacity-40"
-        />
-        <p className="text-white/20 text-xs font-medium">
-          *soporte de acero inoxidable grabado
-        </p>
       </div>
     </section>
   );

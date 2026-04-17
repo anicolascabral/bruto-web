@@ -10,8 +10,8 @@ export default function Nav() {
         <Image
           src="/brand/bruto-logo.svg"
           alt="BRUTO"
-          width={78}
-          height={16}
+          width={107}
+          height={20}
           priority
           className="h-4 w-auto icon-invert"
         />
