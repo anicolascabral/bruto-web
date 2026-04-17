@@ -1,5 +1,8 @@
 import Image from "next/image";
+import type { Locale } from "@/lib/locale";
+import { applyMenuLocale } from "@/lib/menu-en";
 import { getMenuData } from "@/lib/menu";
+import { ui } from "@/lib/ui";
 
 function MenuCard({
   title,
@@ -42,8 +45,9 @@ function MenuCard({
   );
 }
 
-export default async function Menu() {
-  const { platos, tragos, vinos, ok } = await getMenuData();
+export default async function Menu({ locale }: { locale: Locale }) {
+  const t = ui(locale);
+  const { platos, tragos, vinos, ok } = applyMenuLocale(await getMenuData(), locale);
   const hasContent = ok && (platos.length + tragos.length + vinos.length) > 0;
 
   return (
@@ -51,15 +55,16 @@ export default async function Menu() {
       <div className="px-6 pt-16 pb-6 flex items-center justify-between border-b border-white/10">
         <h2 className="text-white/40 font-medium text-xs uppercase tracking-widest m-0">
           <span aria-hidden="true">— </span>
-          <span className="sr-only">Carta · </span>menú
+          <span className="sr-only">{t.menuSr}</span>
+          {t.menuSectionLabel}
         </h2>
         <span className="text-white/40 font-medium text-xs uppercase tracking-widest">
-          Santa Eulària · Ibiza
+          {t.menuLocation}
         </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5">
-        <MenuCard title="platos" icon="/brand/icon-fork.svg" accent>
+        <MenuCard title={t.menuPlatos} icon="/brand/icon-fork.svg" accent>
           {ok && platos.length > 0 ? (
             <ul className="flex flex-col">
               {platos.map((item) => (
@@ -86,13 +91,11 @@ export default async function Menu() {
               ))}
             </ul>
           ) : (
-            <p className="font-medium text-sm text-black/60">
-              Carta no disponible en este momento — preguntá en barra.
-            </p>
+            <p className="font-medium text-sm text-black/60">{t.menuFallback}</p>
           )}
         </MenuCard>
 
-        <MenuCard title="tragos" icon="/brand/icon-glass.svg">
+        <MenuCard title={t.menuTragos} icon="/brand/icon-glass.svg">
           {hasContent ? (
             <>
               {tragos.length > 0 && (
@@ -121,13 +124,14 @@ export default async function Menu() {
                 <div className={tragos.length > 0 ? "mt-10 pt-8 border-t border-white/20" : ""}>
                   <div className="grid grid-cols-[minmax(0,1fr)_3.75rem_4.75rem] gap-x-3 items-end mb-3">
                     <h4 className="text-white/50 font-medium text-xs uppercase tracking-widest m-0 min-w-0">
-                      <span aria-hidden="true">— </span>vinos
+                      <span aria-hidden="true">— </span>
+                      {t.menuVinos}
                     </h4>
                     <span className="text-white/40 font-medium text-[10px] uppercase tracking-widest text-right">
-                      copa
+                      {t.menuCopa}
                     </span>
                     <span className="text-white/40 font-medium text-[10px] uppercase tracking-widest text-right">
-                      botella
+                      {t.menuBotella}
                     </span>
                   </div>
                   <ul className="flex flex-col">
@@ -172,9 +176,7 @@ export default async function Menu() {
               )}
             </>
           ) : (
-            <p className="font-medium text-sm text-white/50">
-              Carta no disponible en este momento — preguntá en barra.
-            </p>
+            <p className="font-medium text-sm text-white/50">{t.menuFallback}</p>
           )}
         </MenuCard>
       </div>

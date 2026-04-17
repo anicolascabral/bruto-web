@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
+import { headers } from "next/headers";
 import Script from "next/script";
 import "./globals.css";
-import { EVENTS } from "@/lib/events";
-import { getMenuData, menuDataToSchemaMenuItems } from "@/lib/menu";
+import { buildJsonLdGraph } from "@/lib/jsonld";
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/locale";
 import { SITE_URL, site } from "@/lib/site";
 
 const archivo = Archivo({
@@ -34,6 +35,7 @@ export const metadata: Metadata = {
     languages: {
       "es-ES": "/",
       es: "/",
+      en: "/en",
     },
   },
   openGraph: {
@@ -94,215 +96,22 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
+function localeFromHeader(): Locale {
+  const raw = headers().get("x-next-locale");
+  return isLocale(raw) ? raw : DEFAULT_LOCALE;
+}
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const menuData = await getMenuData();
-  const {
-    platos: platosSchema,
-    tragos: tragosSchema,
-    vinos: vinosSchema,
-  } = menuDataToSchemaMenuItems(menuData);
-  const menuSections: Array<{
-    "@type": "MenuSection";
-    name: string;
-    hasMenuItem: unknown[];
-  }> = [];
-  if (platosSchema.length > 0) {
-    menuSections.push({
-      "@type": "MenuSection",
-      name: "Platos",
-      hasMenuItem: platosSchema,
-    });
-  }
-  if (tragosSchema.length > 0) {
-    menuSections.push({
-      "@type": "MenuSection",
-      name: "Tragos",
-      hasMenuItem: tragosSchema,
-    });
-  }
-  if (vinosSchema.length > 0) {
-    menuSections.push({
-      "@type": "MenuSection",
-      name: "Vinos",
-      hasMenuItem: vinosSchema,
-    });
-  }
-  const hasStructuredMenu = menuSections.length > 0;
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": ["BarOrPub", "Restaurant", "LocalBusiness"],
-        "@id": `${SITE_URL}/#business`,
-        name: site.name,
-        alternateName: site.legalName,
-        description: site.longDescription,
-        url: SITE_URL,
-        logo: `${SITE_URL}/brand/bruto-logo.svg`,
-        image: [`${SITE_URL}/opengraph-image`],
-        telephone: site.phone,
-        email: site.email,
-        priceRange: site.priceRange,
-        currenciesAccepted: site.currenciesAccepted,
-        paymentAccepted: site.paymentAccepted,
-        servesCuisine: site.servesCuisine,
-        acceptsReservations: false,
-        smokingAllowed: false,
-        publicAccess: true,
-        isAccessibleForFree: true,
-        slogan: "Tapas, vinilos, amigos y tiempo bien usado.",
-        keywords: site.keywords.join(", "),
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: site.address.street,
-          addressLocality: site.address.locality,
-          addressRegion: site.address.region,
-          postalCode: site.address.postalCode,
-          addressCountry: site.address.country,
-        },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: site.geo.lat,
-          longitude: site.geo.lng,
-        },
-        hasMap: site.mapsUrl,
-        areaServed: [
-          { "@type": "City", name: "Santa Eulària des Riu" },
-          { "@type": "AdministrativeArea", name: "Ibiza" },
-          { "@type": "AdministrativeArea", name: "Illes Balears" },
-        ],
-        openingHoursSpecification: site.openingHours.map((o) => ({
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: o.days,
-          opens: o.opens,
-          closes: o.closes,
-        })),
-        sameAs: [site.instagram],
-        ...(hasStructuredMenu ? { hasMenu: { "@id": `${SITE_URL}/#menu` } } : {}),
-        amenityFeature: [
-          { "@type": "LocationFeatureSpecification", name: "Música en vinilo", value: true },
-          { "@type": "LocationFeatureSpecification", name: "Tocadiscos", value: true },
-          { "@type": "LocationFeatureSpecification", name: "Tapas", value: true },
-          { "@type": "LocationFeatureSpecification", name: "Coctelería de autor", value: true },
-          { "@type": "LocationFeatureSpecification", name: "WiFi", value: true },
-        ],
-      },
-      ...(hasStructuredMenu
-        ? [
-            {
-              "@type": "Menu" as const,
-              "@id": `${SITE_URL}/#menu`,
-              name: "Menú BRUTO",
-              inLanguage: "es-ES",
-              hasMenuSection: menuSections,
-            },
-          ]
-        : []),
-      ...EVENTS.filter(
-        (e) => new Date(e.endISO).getTime() >= Date.now(),
-      ).map((e) => ({
-        "@type": "Event" as const,
-        "@id": `${SITE_URL}/#event-${e.slug}`,
-        name: `BRUTO — ${e.title}`,
-        description: e.description,
-        startDate: e.startISO,
-        endDate: e.endISO,
-        eventStatus: "https://schema.org/EventScheduled",
-        eventAttendanceMode:
-          "https://schema.org/OfflineEventAttendanceMode",
-        image: e.posters.map((p) => `${SITE_URL}${p}`),
-        location: { "@id": `${SITE_URL}/#business` },
-        organizer: { "@id": `${SITE_URL}/#business` },
-        isAccessibleForFree: !!e.free,
-        url: `${SITE_URL}/#eventos`,
-        ...(e.free
-          ? {
-              offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "EUR",
-                availability: "https://schema.org/InStock",
-                validFrom: e.startISO,
-                url: `${SITE_URL}/#eventos`,
-              },
-            }
-          : {}),
-      })),
-      {
-        "@type": "WebSite",
-        "@id": `${SITE_URL}/#website`,
-        url: SITE_URL,
-        name: site.name,
-        description: site.description,
-        inLanguage: "es-ES",
-        publisher: { "@id": `${SITE_URL}/#business` },
-      },
-      {
-        "@type": "Organization",
-        "@id": `${SITE_URL}/#org`,
-        name: site.name,
-        url: SITE_URL,
-        logo: `${SITE_URL}/brand/bruto-logo.svg`,
-        email: site.email,
-        telephone: site.phone,
-        sameAs: [site.instagram],
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${SITE_URL}/#faq`,
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: "¿Dónde está BRUTO en Ibiza?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "En Carrer Isidoro Macabich 30, Santa Eulària des Riu, Ibiza (07840).",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿BRUTO es un bar de vinilos?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Sí. En BRUTO la música suena en vinilo todas las noches. Tapas, tragos y vinilos — sin protocolo, con criterio.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿Qué días abre BRUTO?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Abrimos de lunes a domingo de 18:00 a 01:00, excepto los martes que permanece cerrado.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿Se puede reservar mesa?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "BRUTO funciona sin reserva: entrás, buscás mesa y te sentás. Para cumples, eventos privados u open decks escribinos a contacto@brutobar.com o llamá al +34 652 57 17 08.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿Qué tipo de música suena?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Selección curada en vinilo: balearic, funk, soul, disco, jazz y ritmos del Mediterráneo.",
-            },
-          },
-        ],
-      },
-    ],
-  };
+  const locale = localeFromHeader();
+  const jsonLd = await buildJsonLdGraph(locale);
+  const htmlLang = locale === "en" ? "en-GB" : "es-ES";
 
   return (
-    <html lang="es-ES" className="bg-black">
+    <html lang={htmlLang} className="bg-black">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

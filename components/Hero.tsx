@@ -1,34 +1,33 @@
 import Image from "next/image";
+import type { Locale } from "@/lib/locale";
+import { ui } from "@/lib/ui";
 import BrutoLogo from "./BrutoLogo";
 
 const HERO_ICONS = [
   { src: "/brand/icon-bottle.svg", label: "bottle", w: 28, h: 72 },
   { src: "/brand/icon-olives.svg", label: "olives", w: 60, h: 64 },
-  { src: "/brand/icon-notes.svg",  label: "notes",  w: 56, h: 64 },
-  { src: "/brand/icon-glass.svg",  label: "glass",  w: 40, h: 60 },
-  { src: "/brand/icon-fork.svg",   label: "fork",   w: 32, h: 64 },
-  { src: "/brand/icon-vinyl.svg",  label: "vinyl",  w: 52, h: 66 },
+  { src: "/brand/icon-notes.svg", label: "notes", w: 56, h: 64 },
+  { src: "/brand/icon-glass.svg", label: "glass", w: 40, h: 60 },
+  { src: "/brand/icon-fork.svg", label: "fork", w: 32, h: 64 },
+  { src: "/brand/icon-vinyl.svg", label: "vinyl", w: 52, h: 66 },
 ];
 
-export default function Hero() {
+export default function Hero({ locale }: { locale: Locale }) {
+  const t = ui(locale);
+
   return (
     <section
       className="relative min-h-screen bg-neon flex flex-col justify-between overflow-hidden"
       aria-labelledby="bruto-h1"
     >
-      {/* SEO-critical H1 — visually hidden but read by search engines & screen readers */}
       <h1 id="bruto-h1" className="sr-only">
-        BRUTO — Bar de tapas y vinilos en Santa Eulària des Riu, Ibiza. Isidoro
-        Macabich 30. Tragos con criterio, tapas de verdad, música en vinilo
-        todas las noches.
+        {t.heroH1}
       </h1>
 
-      {/* Logo — full width, fills the hero */}
       <div className="flex-1 flex items-center px-4 pt-24 pb-4">
         <BrutoLogo className="w-full text-black" />
       </div>
 
-      {/* Iconography strip — lifted straight from the brand PDF */}
       <div className="px-6 pb-6 border-t border-black/10 pt-6">
         <div className="flex items-end justify-center gap-8 md:gap-14 flex-wrap">
           {HERO_ICONS.map((i) => (
@@ -45,12 +44,11 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bottom row */}
       <div className="flex items-end justify-between px-6 pb-8 border-t border-black/10 pt-5">
         <p className="font-medium text-black text-xl md:text-2xl lowercase tracking-tight leading-tight">
-          tapas
+          {t.heroTaglineL1}
           <br />
-          &amp; vinilos
+          {t.heroTaglineL2}
         </p>
 
         <div className="flex flex-col items-end gap-3">

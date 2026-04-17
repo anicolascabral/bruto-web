@@ -1,15 +1,7 @@
 import Image from "next/image";
+import type { Locale } from "@/lib/locale";
 import { site } from "@/lib/site";
-
-const hours = [
-  { day: "Lunes", time: "18:00 — 01:00" },
-  { day: "Martes", time: "Cerrado" },
-  { day: "Miércoles", time: "18:00 — 01:00" },
-  { day: "Jueves", time: "18:00 — 01:00" },
-  { day: "Viernes", time: "18:00 — 01:00" },
-  { day: "Sábado", time: "18:00 — 01:00" },
-  { day: "Domingo", time: "18:00 — 01:00" },
-];
+import { ui } from "@/lib/ui";
 
 const ICON_STRIP = [
   { src: "/brand/icon-bottle.svg", w: 24, h: 64 },
@@ -20,18 +12,21 @@ const ICON_STRIP = [
   { src: "/brand/icon-vinyl.svg",  w: 46, h: 62 },
 ];
 
-export default function Footer() {
-  const today = new Date().toLocaleDateString("es-ES", {
-    weekday: "long",
-  });
+export default function Footer({ locale }: { locale: Locale }) {
+  const t = ui(locale);
+  const weekLocale = locale === "en" ? "en-GB" : "es-ES";
+  const today = new Date().toLocaleDateString(weekLocale, { weekday: "long" });
   const todayFormatted = today.charAt(0).toUpperCase() + today.slice(1);
+  const todayShort =
+    locale === "en"
+      ? new Date().toLocaleDateString("en-GB", { weekday: "short" })
+      : todayFormatted;
 
   return (
     <footer id="footer" className="bg-black border-t border-white/10" aria-labelledby="bruto-contact-h2">
       <h2 id="bruto-contact-h2" className="sr-only">
-        Dónde estamos · BRUTO bar de tapas y vinilos en Santa Eulària des Riu, Ibiza
+        {t.footerSr}
       </h2>
-      {/* Big location text */}
       <div className="px-6 pt-20 pb-16 border-b border-white/10 overflow-hidden">
         <p
           className="font-black text-white/70 leading-none whitespace-nowrap"
@@ -45,7 +40,6 @@ export default function Footer() {
         </p>
       </div>
 
-      {/* Iconography strip — same lineup as the brand PDF */}
       <div className="border-b border-white/10 py-10 overflow-hidden">
         <div className="flex items-end justify-center gap-8 md:gap-14 flex-wrap opacity-60">
           {ICON_STRIP.map((i) => (
@@ -61,12 +55,10 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Info grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 border-b border-white/10">
-        {/* Address */}
         <div className="px-6 py-10 border-b md:border-b-0 md:border-r border-white/10">
           <p className="text-white/40 text-xs uppercase tracking-widest font-medium mb-4">
-            Dirección
+            {t.footerAddress}
           </p>
           <a
             href="https://share.google/s5jRnc5OYu4hfFSJ6"
@@ -81,38 +73,42 @@ export default function Footer() {
             <span className="text-neon">Ibiza</span>, 07840
           </a>
           <p className="mt-4 text-white/30 text-xs uppercase tracking-widest font-medium">
-            Cómo llegar →
+            {t.footerDirections}
           </p>
         </div>
 
-        {/* Hours */}
         <div className="px-6 py-10 border-b md:border-b-0 md:border-r border-white/10">
           <p className="text-white/40 text-xs uppercase tracking-widest font-medium mb-4">
-            Horario
+            {t.footerHours}
           </p>
           <ul className="flex flex-col gap-1">
-            {hours.map((h) => (
-              <li
-                key={h.day}
-                className={`flex justify-between text-sm font-medium ${
-                  h.day === todayFormatted
-                    ? "text-neon"
-                    : h.time === "Cerrado"
-                    ? "text-white/20"
-                    : "text-white/70"
-                }`}
-              >
-                <span>{h.day}</span>
-                <span className="tabular-nums">{h.time}</span>
-              </li>
-            ))}
+            {t.hours.map((h) => {
+              const isToday =
+                locale === "en"
+                  ? h.day === todayShort
+                  : h.day === todayFormatted;
+              return (
+                <li
+                  key={h.day}
+                  className={`flex justify-between text-sm font-medium ${
+                    isToday
+                      ? "text-neon"
+                      : h.time === "Cerrado" || h.time === "Closed"
+                      ? "text-white/20"
+                      : "text-white/70"
+                  }`}
+                >
+                  <span>{h.day}</span>
+                  <span className="tabular-nums">{h.time}</span>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
-        {/* Contact */}
         <div className="px-6 py-10">
           <p className="text-white/40 text-xs uppercase tracking-widest font-medium mb-4">
-            Contacto
+            {t.footerContact}
           </p>
           <a
             href="tel:+34652571708"
@@ -133,7 +129,7 @@ export default function Footer() {
             className="mt-6 inline-flex items-center gap-2 text-white/40 hover:text-neon text-xs uppercase tracking-widest font-medium transition-colors duration-150"
           >
             <span className="text-neon" aria-hidden="true">★</span>
-            Reseñanos en Google →
+            {t.footerReview}
           </a>
           <p className="text-white/40 text-sm font-medium mt-6 flex items-center gap-2">
             <Image
@@ -143,12 +139,11 @@ export default function Footer() {
               height={14}
               className="h-3 w-auto icon-invert opacity-60"
             />
-            tapas &amp; vinilos
+            {t.footerTag}
           </p>
         </div>
       </div>
 
-      {/* Bottom bar — mini wordmark */}
       <div className="px-6 py-5 flex items-center justify-between">
         <Image
           src="/brand/bruto-logo.svg"
@@ -158,7 +153,7 @@ export default function Footer() {
           className="h-3 w-auto icon-invert opacity-40"
         />
         <span className="text-white/20 text-xs font-medium uppercase tracking-widest">
-          tapas &amp; vinilos — ibiza
+          {t.footerBar}
         </span>
       </div>
     </footer>

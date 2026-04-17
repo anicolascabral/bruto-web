@@ -1,4 +1,5 @@
 import { cache } from "react";
+import type { Locale } from "@/lib/locale";
 
 const MENU_ITEMS_URL =
   process.env.MENU_ITEMS_URL?.replace(/\/$/, "") ??
@@ -181,11 +182,16 @@ type SchemaMenuItem = {
   offers?: unknown | unknown[];
 };
 
-export function menuDataToSchemaMenuItems(data: MenuData): {
+export function menuDataToSchemaMenuItems(
+  data: MenuData,
+  locale: Locale = "es",
+): {
   platos: SchemaMenuItem[];
   tragos: SchemaMenuItem[];
   vinos: SchemaMenuItem[];
 } {
+  const glass = locale === "en" ? "Glass" : "Copa";
+  const bottle = locale === "en" ? "Bottle" : "Botella";
   const platos: SchemaMenuItem[] = data.platos.map((p) => {
     const item: SchemaMenuItem = {
       "@type": "MenuItem",
@@ -222,7 +228,7 @@ export function menuDataToSchemaMenuItems(data: MenuData): {
     if (v.copa != null) {
       offers.push({
         "@type": "Offer",
-        name: "Copa",
+        name: glass,
         price: v.copa,
         priceCurrency: "EUR",
       });
@@ -230,7 +236,7 @@ export function menuDataToSchemaMenuItems(data: MenuData): {
     if (v.botella != null) {
       offers.push({
         "@type": "Offer",
-        name: "Botella",
+        name: bottle,
         price: v.botella,
         priceCurrency: "EUR",
       });

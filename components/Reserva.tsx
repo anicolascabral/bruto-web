@@ -1,5 +1,7 @@
 import Image from "next/image";
+import type { Locale } from "@/lib/locale";
 import { site } from "@/lib/site";
+import { ui } from "@/lib/ui";
 
 const waNumber = site.phone.replace(/[^0-9]/g, "");
 const waUrl = (text: string) =>
@@ -17,45 +19,42 @@ type Opcion = {
   accent?: boolean;
 };
 
-const OPCIONES: Opcion[] = [
-  {
-    id: "cumpleanos",
-    number: "01",
-    icon: "/brand/icon-bottle.svg",
-    title: "Cumpleaños",
-    subtitle: "tu noche, tu playlist",
-    body:
-      "Reservamos la mesa larga, armamos la carta a medida y te dejamos la bandeja un rato. Sin protocolo — con intención.",
-    cta: "Armar mi cumple",
-    waText:
-      "Hola BRUTO! Me gustaría armar mi cumpleaños en el bar. ¿Me pasan info?",
-  },
-  {
-    id: "evento-privado",
-    number: "02",
-    icon: "/brand/icon-glass.svg",
-    title: "Evento privado",
-    subtitle: "despedida · launch · cena",
-    body:
-      "Tus amigos, nuestro lugar. Carta BRUTO, selección en vinilo, y el horario lo marcás vos.",
-    cta: "Consultar disponibilidad",
-    waText:
-      "Hola BRUTO! Quería consultar por un evento privado. ¿Me cuentan cómo funciona?",
-    accent: true,
-  },
-  {
-    id: "traeturvinilo",
-    number: "03",
-    icon: "/brand/icon-vinyl.svg",
-    title: "Traé tu vinilo",
-    subtitle: "open decks · noche de curadores",
-    body:
-      "¿Coleccionás vinilos? La bandeja es tuya un rato. Elegimos día, hora, y lo pasás.",
-    cta: "Quiero pinchar",
-    waText:
-      "Hola BRUTO! Quiero llevar mis vinilos a pinchar un rato. ¿Qué día puedo?",
-  },
-];
+function opcionesForLocale(locale: Locale): Opcion[] {
+  const o = ui(locale).reservaOptions;
+  return [
+    {
+      id: "cumpleanos",
+      number: "01",
+      icon: "/brand/icon-bottle.svg",
+      title: o.cumple.title,
+      subtitle: o.cumple.sub,
+      body: o.cumple.body,
+      cta: o.cumple.cta,
+      waText: o.cumple.wa,
+    },
+    {
+      id: "evento-privado",
+      number: "02",
+      icon: "/brand/icon-glass.svg",
+      title: o.privado.title,
+      subtitle: o.privado.sub,
+      body: o.privado.body,
+      cta: o.privado.cta,
+      waText: o.privado.wa,
+      accent: true,
+    },
+    {
+      id: "traeturvinilo",
+      number: "03",
+      icon: "/brand/icon-vinyl.svg",
+      title: o.vinilo.title,
+      subtitle: o.vinilo.sub,
+      body: o.vinilo.body,
+      cta: o.vinilo.cta,
+      waText: o.vinilo.wa,
+    },
+  ];
+}
 
 function OpcionCard({ o }: { o: Opcion }) {
   const isAccent = !!o.accent;
@@ -64,7 +63,7 @@ function OpcionCard({ o }: { o: Opcion }) {
       href={waUrl(o.waText)}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`${o.title} — hablar por WhatsApp`}
+      aria-label={`${o.title} — WhatsApp`}
       className={`p-8 md:p-10 flex flex-col gap-10 group transition-colors duration-200
         ${
           isAccent
@@ -121,27 +120,30 @@ function OpcionCard({ o }: { o: Opcion }) {
   );
 }
 
-export default function Reserva() {
+export default function Reserva({ locale }: { locale: Locale }) {
+  const t = ui(locale);
+  const mailSubject =
+    locale === "en" ? "Event at BRUTO" : "Evento en BRUTO";
+
   return (
     <section
       id="reservas"
       className="bg-black border-t border-white/10"
       aria-labelledby="reservas-h2"
     >
-      {/* Section label */}
       <div className="px-6 pt-16 pb-6 flex items-center justify-between border-b border-white/10">
         <h2
           id="reservas-h2"
           className="text-white/40 font-medium text-xs uppercase tracking-widest m-0"
         >
-          <span aria-hidden="true">— </span>reservas &amp; eventos
+          <span aria-hidden="true">— </span>
+          {t.reservaSection}
         </h2>
         <span className="text-white/40 font-medium text-xs uppercase tracking-widest">
-          cumpleaños · privados · open decks
+          {t.reservaTags}
         </span>
       </div>
 
-      {/* Statement */}
       <div className="px-6 pt-16 pb-10 border-b border-white/10 overflow-hidden">
         <p
           className="font-black text-white leading-none"
@@ -151,33 +153,40 @@ export default function Reserva() {
             lineHeight: "0.88",
           }}
         >
-          tu noche
+          {t.reservaLine1}
           <br />
-          <span className="text-neon">en bruto.</span>
+          <span className="text-neon">{t.reservaLine2}</span>
         </p>
         <p className="mt-10 font-medium text-white/50 text-base md:text-lg max-w-xl tracking-tight leading-snug">
-          Sin reserva. Entrás, buscás lugar, te sentás.
-          <br />
-          Para una noche <span className="text-white">a medida</span> — cumple,
-          privado, tus vinilos en la bandeja — la armamos juntos.
+          {locale === "es" ? (
+            <>
+              Sin reserva. Entrás, buscás lugar, te sentás.
+              <br />
+              Para una noche <span className="text-white">a medida</span> — cumple,
+              privado, tus vinilos en la bandeja — la armamos juntos.
+            </>
+          ) : (
+            <>
+              No reservations. Walk in, find a seat, sit down.
+              <br />
+              For a <span className="text-white">tailored</span> night — birthday,
+              private, your vinyl on the decks — we set it up together.
+            </>
+          )}
         </p>
       </div>
 
-      {/* Three options */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">
-        {OPCIONES.map((o) => (
+        {opcionesForLocale(locale).map((o) => (
           <OpcionCard key={o.id} o={o} />
         ))}
       </div>
 
-      {/* Alt contact footer */}
       <div className="border-t border-white/10 px-6 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <p className="text-white/40 text-sm font-medium tracking-tight">
-          ¿Preferís mail?{" "}
+          {t.reservaMail}{" "}
           <a
-            href={`mailto:${site.email}?subject=${encodeURIComponent(
-              "Evento en BRUTO",
-            )}`}
+            href={`mailto:${site.email}?subject=${encodeURIComponent(mailSubject)}`}
             className="text-white/80 hover:text-neon underline decoration-white/30 underline-offset-4 transition-colors duration-150"
           >
             {site.email}
@@ -187,7 +196,7 @@ export default function Reserva() {
           href={`tel:${site.phone}`}
           className="text-white/70 font-medium text-xs uppercase tracking-widest hover:text-neon transition-colors duration-150"
         >
-          O llamá · {site.phonePretty} →
+          {t.reservaPhone} {site.phonePretty} →
         </a>
       </div>
     </section>

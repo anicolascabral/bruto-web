@@ -1,11 +1,13 @@
+import type { Locale } from "@/lib/locale";
 import { site } from "@/lib/site";
+import { ui } from "@/lib/ui";
 
-function Stars() {
+function Stars({ aria }: { aria: string }) {
   return (
     <div
       className="flex items-center gap-1 text-neon leading-none"
       role="img"
-      aria-label="5 estrellas en Google"
+      aria-label={aria}
     >
       {[0, 1, 2, 3, 4].map((i) => (
         <span
@@ -21,10 +23,14 @@ function Stars() {
   );
 }
 
-export default function Reviews() {
+export default function Reviews({ locale }: { locale: Locale }) {
+  const t = ui(locale);
+  const reviewAria =
+    locale === "en" ? "Leave a review on Google" : "Dejar una reseña en Google";
+
   return (
     <section
-      id="resenas"
+      id="reseñas"
       className="bg-black border-t border-white/10"
       aria-labelledby="reviews-h2"
     >
@@ -33,10 +39,11 @@ export default function Reviews() {
           id="reviews-h2"
           className="text-white/40 font-medium text-xs uppercase tracking-widest m-0"
         >
-          <span aria-hidden="true">— </span>reseñas
+          <span aria-hidden="true">— </span>
+          {t.reviewsSection}
         </h2>
         <span className="text-white/40 font-medium text-xs uppercase tracking-widest hidden sm:inline">
-          si te fuiste feliz, contalo
+          {t.reviewsTag}
         </span>
       </div>
 
@@ -50,26 +57,25 @@ export default function Reviews() {
               lineHeight: "0.88",
             }}
           >
-            contá
+            {t.reviewsH1a}
             <br />
-            <span className="text-neon">cómo te fue.</span>
+            <span className="text-neon">{t.reviewsH1b}</span>
           </p>
           <p className="mt-8 font-medium text-white/50 text-base md:text-lg max-w-xl tracking-tight leading-snug">
-            Veinte segundos en Google. Si te fuiste feliz, contalo — así el
-            próximo encuentra el lugar.
+            {t.reviewsBody}
           </p>
         </div>
 
         <div className="flex flex-col md:items-end gap-6">
-          <Stars />
+          <Stars aria={t.reviewsStarsAria} />
           <a
             href={site.googleReviewUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Dejar una reseña en Google"
+            aria-label={reviewAria}
             className="inline-flex items-center gap-2 border border-neon bg-neon hover:bg-transparent hover:text-neon text-black font-medium text-xs uppercase tracking-widest px-5 py-3 transition-colors duration-150 self-start md:self-auto"
           >
-            Reseñar en Google
+            {t.reviewsCta}
             <span aria-hidden="true">→</span>
           </a>
         </div>

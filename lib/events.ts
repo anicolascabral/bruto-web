@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/locale";
+
 /**
  * Agenda de eventos de BRUTO.
  * El primer evento "activo" (endDate >= hoy) se muestra como próximo evento en la web.
@@ -28,6 +30,11 @@ export type EventItem = {
   posters: string[];
   /** ¿Entrada libre? */
   free?: boolean;
+  /** Copys en inglés (opcional) */
+  titleEn?: string;
+  taglineEn?: string;
+  descriptionEn?: string;
+  dateLabelEn?: string;
 };
 
 export const EVENTS: EventItem[] = [
@@ -48,6 +55,11 @@ export const EVENTS: EventItem[] = [
       "/events/apertura-04.jpeg",
     ],
     free: true,
+    titleEn: "Opening",
+    taglineEn: "tapas · vinyl · drinks",
+    descriptionEn:
+      "Tapas, vinyl, drinks. No protocol — with intent. Doors from 3pm.",
+    dateLabelEn: "Mon 20 · April",
   },
 ];
 
@@ -62,14 +74,17 @@ export function getUpcomingEvent(now: Date = new Date()): EventItem | null {
 }
 
 /** Construye URL de Google Calendar para añadir el evento con un click. */
-export function googleCalendarUrl(e: EventItem): string {
+export function googleCalendarUrl(e: EventItem, locale: Locale = "es"): string {
   const fmt = (iso: string) =>
     new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, "");
+  const title = locale === "en" && e.titleEn ? e.titleEn : e.title;
+  const details =
+    locale === "en" && e.descriptionEn ? e.descriptionEn : e.description;
   const params = new URLSearchParams({
     action: "TEMPLATE",
-    text: `BRUTO — ${e.title}`,
+    text: `BRUTO — ${title}`,
     dates: `${fmt(e.startISO)}/${fmt(e.endISO)}`,
-    details: e.description,
+    details,
     location: e.location,
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;

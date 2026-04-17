@@ -14,8 +14,14 @@ export const site = {
   tagline: "Tapas & vinilos en Ibiza",
   description:
     "BRUTO es un bar de tapas y vinilos en Santa Eulària des Riu, Ibiza. Tragos honestos, platos con criterio y música en vinilo — todas las noches. Isidoro Macabich 30.",
+  descriptionEn:
+    "BRUTO is a tapas & vinyl bar in Santa Eulària des Riu, Ibiza. Honest drinks, food with intent, and vinyl every night. Isidoro Macabich 30.",
   longDescription:
     "BRUTO es el bar de tapas y vinilos de Santa Eulària des Riu, Ibiza. Un lugar donde las cosas pasan sin demasiado protocolo, pero con intención: tapas de verdad, tragos con criterio y música elegida en vinilo. Abrimos todas las noches menos los martes. Isidoro Macabich 30.",
+  /** JSON-LD / schema copy (English) */
+  longDescriptionEn:
+    "BRUTO is the tapas & vinyl bar in Santa Eulària des Riu, Ibiza. A place where things happen without too much protocol — but with intent: real tapas, drinks with taste, and music on vinyl. Open every night except Tuesdays. Isidoro Macabich 30.",
+  sloganEn: "Tapas, vinyl, friends — time well spent.",
   url: SITE_URL,
   instagram: "https://www.instagram.com/bruto.____/",
   instagramHandle: "@bruto.____",
