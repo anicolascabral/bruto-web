@@ -3,7 +3,10 @@ import { ImageResponse } from "next/og";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
+const glassSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="479.59 167.53 56.14 83.29"><g transform="matrix(1,0,0,-1,0,405)"><path fill="#000" d="M527.5776 192.4911C531.6556 196.7521 533.7236 201.9731 533.7236 208.0111V235.4731H505.6346V223.6731C505.3406 222.9481 504.0586 220.0261 500.8266 218.5981 496.7806 216.8101 493.0116 218.8371 492.3696 219.1821 489.7546 220.5881 488.4756 222.7541 488.0006 223.6731V235.4731H481.5856V208.0111C481.5856 201.9721 483.6526 196.7501 487.7296 192.4911 491.4106 188.6441 497.2316 186.5221 505.0186 186.1371V181.1521C498.6856 181.1521 492.3526 181.1521 486.0196 181.1521V156.1841H529.2906V181.1521H510.3346V186.1391C518.1036 186.5341 523.9076 188.6561 527.5776 192.4911"/></g></svg>`;
+
 export default function AppleIcon() {
+  const base64 = Buffer.from(glassSvg).toString("base64");
   return new ImageResponse(
     (
       <div
@@ -14,14 +17,15 @@ export default function AppleIcon() {
           alignItems: "center",
           justifyContent: "center",
           background: "#E6FF7B",
-          fontSize: 140,
-          fontWeight: 900,
-          color: "#000",
-          letterSpacing: "-0.06em",
-          fontFamily: "sans-serif",
         }}
       >
-        B
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`data:image/svg+xml;base64,${base64}`}
+          alt=""
+          width={89}
+          height={132}
+        />
       </div>
     ),
     { ...size }
