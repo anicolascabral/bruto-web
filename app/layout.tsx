@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { getMenuData, menuDataToSchemaMenuItems } from "@/lib/menu";
 import { SITE_URL, site } from "@/lib/site";
 
 const archivo = Archivo({
@@ -92,11 +93,45 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const menuData = await getMenuData();
+  const {
+    platos: platosSchema,
+    tragos: tragosSchema,
+    vinos: vinosSchema,
+  } = menuDataToSchemaMenuItems(menuData);
+  const menuSections: Array<{
+    "@type": "MenuSection";
+    name: string;
+    hasMenuItem: unknown[];
+  }> = [];
+  if (platosSchema.length > 0) {
+    menuSections.push({
+      "@type": "MenuSection",
+      name: "Platos",
+      hasMenuItem: platosSchema,
+    });
+  }
+  if (tragosSchema.length > 0) {
+    menuSections.push({
+      "@type": "MenuSection",
+      name: "Tragos",
+      hasMenuItem: tragosSchema,
+    });
+  }
+  if (vinosSchema.length > 0) {
+    menuSections.push({
+      "@type": "MenuSection",
+      name: "Vinos",
+      hasMenuItem: vinosSchema,
+    });
+  }
+  const hasStructuredMenu = menuSections.length > 0;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -147,7 +182,7 @@ export default function RootLayout({
           closes: o.closes,
         })),
         sameAs: [site.instagram],
-        hasMenu: { "@id": `${SITE_URL}/#menu` },
+        ...(hasStructuredMenu ? { hasMenu: { "@id": `${SITE_URL}/#menu` } } : {}),
         amenityFeature: [
           { "@type": "LocationFeatureSpecification", name: "Música en vinilo", value: true },
           { "@type": "LocationFeatureSpecification", name: "Tocadiscos", value: true },
@@ -156,50 +191,17 @@ export default function RootLayout({
           { "@type": "LocationFeatureSpecification", name: "WiFi", value: true },
         ],
       },
-      {
-        "@type": "Menu",
-        "@id": `${SITE_URL}/#menu`,
-        name: "Menú BRUTO",
-        inLanguage: "es-ES",
-        hasMenuSection: [
-          {
-            "@type": "MenuSection",
-            name: "Platos",
-            hasMenuItem: [
-              {
-                "@type": "MenuItem",
-                name: "Chivito",
-                description: "lomo, jamón, queso, lechuga, tomate, huevo y mayonesa",
-              },
-              { "@type": "MenuItem", name: "Tortilla" },
-              {
-                "@type": "MenuItem",
-                name: "Empanada",
-                description: "de carne / jamón y queso / humita",
-              },
-              {
-                "@type": "MenuItem",
-                name: "Croqueta",
-                description: "jamón ibérico",
-              },
-            ],
-          },
-          {
-            "@type": "MenuSection",
-            name: "Tragos",
-            hasMenuItem: [
-              { "@type": "MenuItem", name: "Caña" },
-              { "@type": "MenuItem", name: "Negroni" },
-              { "@type": "MenuItem", name: "Americano" },
-              { "@type": "MenuItem", name: "Fernet" },
-              { "@type": "MenuItem", name: "Whiskey" },
-              { "@type": "MenuItem", name: "Roncola" },
-              { "@type": "MenuItem", name: "Gin Tonic" },
-              { "@type": "MenuItem", name: "Copa de vino" },
-            ],
-          },
-        ],
-      },
+      ...(hasStructuredMenu
+        ? [
+            {
+              "@type": "Menu" as const,
+              "@id": `${SITE_URL}/#menu`,
+              name: "Menú BRUTO",
+              inLanguage: "es-ES",
+              hasMenuSection: menuSections,
+            },
+          ]
+        : []),
       {
         "@type": "WebSite",
         "@id": `${SITE_URL}/#website`,

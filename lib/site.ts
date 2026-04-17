@@ -1,10 +1,12 @@
 /**
  * Canonical site configuration — single source of truth for SEO signals.
- * Override the URL with NEXT_PUBLIC_SITE_URL when the custom domain is live.
+ * Production canonical: https://www.brutobar.com
+ * Override per-environment with NEXT_PUBLIC_SITE_URL if needed (preview deploys).
  */
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://brutobar.com";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://www.brutobar.com";
 
 export const site = {
   name: "BRUTO",
