@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { site } from "@/lib/site";
 
 const hours = [
   { day: "Lunes", time: "18:00 — 01:00" },
@@ -124,6 +125,15 @@ export default function Footer() {
             className="font-medium text-white/70 text-sm tracking-tight hover:text-neon transition-colors duration-150 block break-all"
           >
             contacto@brutobar.com
+          </a>
+          <a
+            href={site.googleReviewUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-2 text-white/40 hover:text-neon text-xs uppercase tracking-widest font-medium transition-colors duration-150"
+          >
+            <span className="text-neon" aria-hidden="true">★</span>
+            Reseñanos en Google →
           </a>
           <p className="text-white/40 text-sm font-medium mt-6 flex items-center gap-2">
             <Image

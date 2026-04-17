@@ -23,6 +23,7 @@ export const site = {
   phone: "+34652571708",
   phonePretty: "+34 652 57 17 08",
   mapsUrl: "https://share.google/s5jRnc5OYu4hfFSJ6",
+  googleReviewUrl: "https://g.page/r/CZgRWT3DveBlEBM/review",
   address: {
     street: "Carrer Isidoro Macabich, 30",
     locality: "Santa Eulària des Riu",

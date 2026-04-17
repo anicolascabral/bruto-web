@@ -74,3 +74,9 @@ body {
     filter: invert(1);
   }
 }
+
+/* Small fade-in for the randomized event poster swap */
+@keyframes poster-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

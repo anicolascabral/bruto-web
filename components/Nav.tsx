@@ -24,8 +24,14 @@ export default function Nav() {
           <Image src="/brand/icon-fork.svg" alt="" width={14} height={18} className="h-4 w-auto icon-invert" />
           <Image src="/brand/icon-vinyl.svg" alt="" width={18} height={18} className="h-4 w-auto icon-invert" />
         </div>
+        <a href="#eventos" className="hover:text-neon transition-colors duration-150">
+          Eventos
+        </a>
         <a href="#menu" className="hover:text-neon transition-colors duration-150">
           Menú
+        </a>
+        <a href="#reservas" className="hidden md:inline hover:text-neon transition-colors duration-150">
+          Reservas
         </a>
         <a href="#footer" className="hover:text-neon transition-colors duration-150">
           Ubicación

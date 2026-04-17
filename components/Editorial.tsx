@@ -89,7 +89,9 @@ export default function Editorial() {
           <br />
           Directo, pero con criterio.
           <br />
-          <span className="text-neon">Así es donde funciona.</span>
+          Desprolijo en su justa medida.
+          <br />
+          <span className="text-neon">Y ahí es donde funciona.</span>
         </p>
       </div>
     </section>

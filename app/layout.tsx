@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { EVENTS } from "@/lib/events";
 import { getMenuData, menuDataToSchemaMenuItems } from "@/lib/menu";
 import { SITE_URL, site } from "@/lib/site";
 
@@ -202,6 +203,36 @@ export default async function RootLayout({
             },
           ]
         : []),
+      ...EVENTS.filter(
+        (e) => new Date(e.endISO).getTime() >= Date.now(),
+      ).map((e) => ({
+        "@type": "Event" as const,
+        "@id": `${SITE_URL}/#event-${e.slug}`,
+        name: `BRUTO — ${e.title}`,
+        description: e.description,
+        startDate: e.startISO,
+        endDate: e.endISO,
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode:
+          "https://schema.org/OfflineEventAttendanceMode",
+        image: e.posters.map((p) => `${SITE_URL}${p}`),
+        location: { "@id": `${SITE_URL}/#business` },
+        organizer: { "@id": `${SITE_URL}/#business` },
+        isAccessibleForFree: !!e.free,
+        url: `${SITE_URL}/#eventos`,
+        ...(e.free
+          ? {
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "EUR",
+                availability: "https://schema.org/InStock",
+                validFrom: e.startISO,
+                url: `${SITE_URL}/#eventos`,
+              },
+            }
+          : {}),
+      })),
       {
         "@type": "WebSite",
         "@id": `${SITE_URL}/#website`,
@@ -254,7 +285,7 @@ export default async function RootLayout({
             name: "¿Se puede reservar mesa?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "BRUTO funciona sin reserva previa — se come y se toma a la mesa libre. Para consultas escribinos a contacto@brutobar.com o llamá al +34 652 57 17 08.",
+              text: "BRUTO funciona sin reserva: entrás, buscás mesa y te sentás. Para cumples, eventos privados u open decks escribinos a contacto@brutobar.com o llamá al +34 652 57 17 08.",
             },
           },
           {
