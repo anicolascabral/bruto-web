@@ -12,7 +12,16 @@ const HERO_ICONS = [
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen bg-neon flex flex-col justify-between overflow-hidden">
+    <section
+      className="relative min-h-screen bg-neon flex flex-col justify-between overflow-hidden"
+      aria-labelledby="bruto-h1"
+    >
+      {/* SEO-critical H1 — visually hidden but read by search engines & screen readers */}
+      <h1 id="bruto-h1" className="sr-only">
+        BRUTO — Bar de tapas y vinilos en Santa Eulària des Riu, Ibiza. Isidoro
+        Macabich 30. Tragos con criterio, tapas de verdad, música en vinilo
+        todas las noches.
+      </h1>
 
       {/* Logo — full width, fills the hero */}
       <div className="flex-1 flex items-center px-4 pt-24 pb-4">

@@ -9,7 +9,11 @@ const plan = [
 
 export default function Editorial() {
   return (
-    <section className="bg-black border-t border-white/10">
+    <section className="bg-black border-t border-white/10" aria-labelledby="bruto-manifiesto">
+
+      <h2 id="bruto-manifiesto" className="sr-only">
+        Qué es BRUTO · un bar de tapas y vinilos en Ibiza
+      </h2>
 
       {/* BRUTO ES BRUTO — full bleed statement */}
       <div className="px-4 pt-24 pb-10 overflow-hidden">

@@ -67,9 +67,10 @@ export default function Menu() {
     <section id="menu" className="bg-black border-t border-white/10">
       {/* Section label */}
       <div className="px-6 pt-16 pb-6 flex items-center justify-between border-b border-white/10">
-        <span className="text-white/40 font-medium text-xs uppercase tracking-widest">
-          — menú
-        </span>
+        <h2 className="text-white/40 font-medium text-xs uppercase tracking-widest m-0">
+          <span aria-hidden="true">— </span>
+          <span className="sr-only">Carta · </span>menú
+        </h2>
         <span className="text-white/40 font-medium text-xs uppercase tracking-widest">
           Santa Eulària · Ibiza
         </span>

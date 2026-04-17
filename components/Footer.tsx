@@ -26,7 +26,10 @@ export default function Footer() {
   const todayFormatted = today.charAt(0).toUpperCase() + today.slice(1);
 
   return (
-    <footer id="footer" className="bg-black border-t border-white/10">
+    <footer id="footer" className="bg-black border-t border-white/10" aria-labelledby="bruto-contact-h2">
+      <h2 id="bruto-contact-h2" className="sr-only">
+        Dónde estamos · BRUTO bar de tapas y vinilos en Santa Eulària des Riu, Ibiza
+      </h2>
       {/* Big location text */}
       <div className="px-6 pt-20 pb-16 border-b border-white/10 overflow-hidden">
         <p

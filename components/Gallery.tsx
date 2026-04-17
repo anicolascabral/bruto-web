@@ -31,9 +31,10 @@ export default function Gallery() {
             className="h-6 w-auto icon-invert opacity-60"
           />
           <div>
-            <p className="text-white/30 font-medium text-xs uppercase tracking-widest mb-1">
-              — galería
-            </p>
+            <h2 className="text-white/30 font-medium text-xs uppercase tracking-widest mb-1 m-0">
+              <span aria-hidden="true">— </span>galería
+              <span className="sr-only"> · BRUTO tapas y vinilos Ibiza en Instagram</span>
+            </h2>
             <a
               href="https://www.instagram.com/bruto.____/"
               target="_blank"
