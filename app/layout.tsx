@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
 import { headers } from "next/headers";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { buildJsonLdGraph } from "@/lib/jsonld";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/locale";
@@ -118,6 +119,7 @@ export default async function RootLayout({
       </head>
       <body className={`${archivo.variable} font-sans bg-black text-white antialiased`}>
         {children}
+        <Analytics />
         <Script
           id="ld-json"
           type="application/ld+json"
